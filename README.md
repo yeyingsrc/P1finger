@@ -22,7 +22,7 @@
 
 ## Version
 
-当前最新 `beta_version v0.0.5` （2025/2/19更新）
+当前最新 `beta_version v0.0.5` （2025/2/19更新）[更新日志参见]([P1finger/更新日志.md at master · P001water/P1finger (github.com)](https://github.com/P001water/P1finger/blob/master/更新日志.md))
 
 ---
 
@@ -88,5 +88,4 @@ P1finger.exe -uf urls.txt -socks 127.0.0.1:4781
 ```
 P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
 ```
-
 
