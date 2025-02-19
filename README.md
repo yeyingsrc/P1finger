@@ -20,6 +20,10 @@
 
 
 
+## Version
+
+当前最新 `beta_version v0.0.5` （2025/2/19更新）
+
 ---
 
 # 基本使用
@@ -65,33 +69,24 @@ P1finger -m fofa -uf [target file]
 
 
 
-3. 输出到 Excel 表格文件
+3. 输出到 Excel 表格文件或者json格式保存到文件
 
 ```
-P1finger -uf [target file] -o xlsx
+P1finger [-m fofa] -uf [target file] -o xlsx
 ```
 
-![image-20240925021744468](./img/image-20240925021744468.png)
+![image-20250219152847788](./img/image-20250219152847788.png)
 
 4. socks5 代理
 
 ```
-P1finger.exe -uf D:\tools_dev\Go\P1finger\show.txt -socks 127.0.0.1:4781
+P1finger.exe -uf urls.txt -socks 127.0.0.1:4781
 ```
 
 5. http 代理
 
 ```
-P1finger.exe -uf D:\tools_dev\Go\P1finger\show.txt -httpproxy 127.0.0.1:4781
+P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
 ```
 
 
-
-# 更新日志
-
-v0.0.4
-
-功能重大更新，各位客官敬请体验使用
-
-1. 修改指纹规则规范和形式
-2. 支持两种模式
