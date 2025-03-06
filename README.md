@@ -15,14 +15,14 @@
   1. 基于Fofa测绘系统的web指纹识别
 
 
-* 输出到表格或其他格式
+* 支持excel表格和json格式输出
 * 支持 http / socks代理使用
 
 
 
 ## Version
 
-当前最新 `beta_version v0.0.5` （2025/2/19更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新 `beta_version v0.0.6` （2025/3/7更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
@@ -51,41 +51,41 @@ FofaCredentials:
 
 基于本地规则库模式使用
 
-1.  单个目标探测
-
 ```
 P1finger -u [target]
 P1finger -uf [target file] //-uf 指定url文件
 ```
 
+![image-20250306190938229](./img/image-20250306190938229.png)
+
+
+
 基于fofa的采集模式
+
+`-o` 可自定义输出文件名，支持`json`和`excel表格`模式
 
 ```
 P1finger -m fofa -u [target]
-P1finger -m fofa -uf [target file]
+P1finger -m fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
 ```
 
-![image-20250212212234854](./img/image-20250212212234854.png)
+![image-20250306193647713](./img/image-20250306193647713.png)
 
 
 
-3. 输出到 Excel 表格文件或者json格式保存到文件
-
-```
-P1finger [-m fofa] -uf [target file] -o xlsx
-```
-
-![image-20250219152847788](./img/image-20250219152847788.png)
-
-4. socks5 代理
+3. socks5 代理
 
 ```
 P1finger.exe -uf urls.txt -socks 127.0.0.1:4781
 ```
 
-5. http 代理
+4. http 代理
 
 ```
 P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
 ```
+
+
+
+
 
