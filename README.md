@@ -18,11 +18,13 @@
 * 支持excel表格和json格式输出
 * 支持 http / socks代理使用
 
+在线体验地址：http://p1finger.securapath.org
+
 
 
 ## Version
 
-当前最新 `beta_version v0.0.6` （2025/3/7更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新 `beta_version v0.0.7` （2025/3/16更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
