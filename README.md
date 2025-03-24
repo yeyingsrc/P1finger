@@ -56,9 +56,11 @@ FofaCredentials:
 ```
 P1finger -u [target]
 P1finger -uf [target file] //-uf 指定url文件
+
+[-rate 500 可控制协程数量，默认值为500]
 ```
 
-![image-20250324154707515](./img/image-20250324154707515.png)
+![image-20250324155741030](./img/image-20250324155741030.png)
 
 基于fofa的采集模式
 
