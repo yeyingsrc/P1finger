@@ -24,7 +24,7 @@
 
 ## Version
 
-当前最新 `beta_version v0.0.7` （2025/3/16更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新 `beta_version v0.0.8` （2025/3/24更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
@@ -58,9 +58,7 @@ P1finger -u [target]
 P1finger -uf [target file] //-uf 指定url文件
 ```
 
-![image-20250306190938229](./img/image-20250306190938229.png)
-
-
+![image-20250324154707515](./img/image-20250324154707515.png)
 
 基于fofa的采集模式
 
