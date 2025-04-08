@@ -64,14 +64,14 @@ P1finger -uf [target file] //-uf 指定url文件
 
 基于fofa的采集模式
 
-`-o` 可自定义输出文件名，支持`json`和`excel表格`模式
+设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式
 
 ```
 P1finger -m fofa -u [target]
 P1finger -m fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
 ```
 
-![image-20250306193647713](./img/image-20250306193647713.png)
+![image-20250407233206090](./img/image-20250407233206090.png)
 
 
 
