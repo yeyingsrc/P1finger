@@ -8,36 +8,35 @@
 
 # 功能特色
 
-* P1finger `v0.0.4` 版本开始支持两种指纹识别模式
+* P1finger 支持两种指纹识别模式：
 
-  1. 基于本地规则库的重点资产指纹识别
+  1. 基于本地规则库的 Web 资产指纹识别
 
-  1. 基于Fofa测绘系统的web指纹识别
-
-
-* 支持excel表格和json格式输出
+  2. 基于Fofa测绘系统的 Web 指纹识别
+* 模块化的指纹库，高度支持客制化，方便自定义指纹库使用
+* 支持`Excel`表格和`Json`格式导出，便于数据的二次处理
 * 支持 http / socks代理使用
 
-在线体验地址：http://p1finger.securapath.org
+在线体验地址：http://p1finger.securapath.org （在线版后端更新慢，建议下载Github Release版本）
 
 
 
 ## Version
 
-当前最新 `beta_version v0.0.8` （2025/3/24更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新 `beta_version v0.1.0` （2025/4/08更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
-# 基本使用
-
-## 配置Fofa key
+## 首次运行配置
 
 P1finger在命令行下首次运行生成 `p1fingerConf.yaml` 配置文件，在配置文件中填上 `email` 和 `key` 即可。
 
-文件内容参考
+生成的配置文件内容如下
 
-```
-FofaCredentials:
+```yaml
+CustomizeFingerFiles: [] 			// 自定义的指纹文件
+UseDefaultFingerFils: false			// 自定义指纹库后是否还加入默认的指纹库
+FofaCredentials: 				    // Fofa Api凭证
     Email: P001water@163.com
     ApiKey: xxxx
 ```
@@ -55,12 +54,12 @@ FofaCredentials:
 
 ```
 P1finger -u [target]
-P1finger -uf [target file] //-uf 指定url文件
+P1finger -uf [target file] // -uf 指定url文件
 
 [-rate 500 可控制协程数量，默认值为500]
 ```
 
-![image-20250324155741030](./img/image-20250324155741030.png)
+![image-20250324155741030](./img/image-20250324155741030-1744104520277-2.png)
 
 基于fofa的采集模式
 
@@ -71,9 +70,7 @@ P1finger -m fofa -u [target]
 P1finger -m fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
 ```
 
-![image-20250407233206090](./img/image-20250407233206090.png)
-
-
+![image-20250407233235200](./img/image-20250407233235200.png)
 
 3. socks5 代理
 
@@ -89,5 +86,10 @@ P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
 
 
 
+# 致谢
 
+感谢社区已有的指纹库和整合指纹库做出努力的作者们，P1finger的指纹库在这些巨人的肩膀上建立
+
+* [0x727/FingerprintHub](https://github.com/0x727/FingerprintHub)
+* [chainreactors/spray](https://github.com/chainreactors/spray)
 
