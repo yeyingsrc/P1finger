@@ -50,7 +50,7 @@ FofaCredentials: 				    // Fofa Api凭证
 1. `-m rule` 基于本地规则库模式，（默认模式）
 2. `-m fofa` 基于fofa的采集模式，（手动开启）
 
-基于本地规则库模式使用
+* 基于本地规则库模式使用
 
 ```
 P1finger -u [target]
@@ -61,9 +61,9 @@ P1finger -uf [target file] // -uf 指定url文件
 
 ![image-20250324155741030](./img/image-20250324155741030-1744104520277-2.png)
 
-基于fofa的采集模式
+* 基于fofa的采集模式使用
 
-设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式
+`-m fofa`切换到Fofa模式， 设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式
 
 ```
 P1finger -m fofa -u [target]
@@ -72,17 +72,35 @@ P1finger -m fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件�
 
 ![image-20250407233235200](./img/image-20250407233235200.png)
 
-3. socks5 代理
+* 代理模式使用
+
+socks5 代理
 
 ```
 P1finger.exe -uf urls.txt -socks 127.0.0.1:4781
 ```
 
-4. http 代理
+http 代理
 
 ```
 P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
 ```
+
+* 自定义指纹库使用
+
+如下表示，在配置文件中配置自定义的`redteam.yaml`指纹库文件。`UseDefaultFingerFils`表示自定义指纹库的情况下，是否还带上默认的指纹库
+
+```
+CustomizeFingerFiles:
+  - redteam.yaml
+UseDefaultFingerFils: true
+```
+
+
+
+## 指纹库规则和如何贡献指纹
+
+详情参考：[指纹库规范 - 安全漫道.team Wiki](https://securapath.github.io/SecuraPathWiki/P1finger/fingersRepo/)
 
 
 
