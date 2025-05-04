@@ -7,6 +7,7 @@ import (
 type FingerprintsType struct {
 	ID          string        `yaml:"id"`
 	Name        string        `yaml:"name"`
+	FingerFile  string        `yaml:"fingerFile"` //所属指纹文件
 	Author      string        `yaml:"author"`
 	Tags        []string      `yaml:"tags"`
 	Description string        `yaml:"description"`

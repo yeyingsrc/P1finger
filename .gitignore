@@ -7,6 +7,8 @@ cmake_install.cmake
 Makefile
 compile_commands.json
 
+p1finger.json
+
 # Visual Studio specific files
 *.vcxproj*
 *.sln

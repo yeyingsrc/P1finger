@@ -1,10 +1,12 @@
 package vars
 
 import (
-	"P1finger/cmd/flag"
-	"P1finger/modules/detectbyFofa"
-	"P1finger/modules/ruleClient"
+	"github.com/P001water/P1finger/cmd/flag"
+	"github.com/P001water/P1finger/modules/detectbyFofa"
+	"github.com/P001water/P1finger/modules/ruleClient"
 	"net/http"
+	"os"
+	"path/filepath"
 )
 
 var (
@@ -15,6 +17,7 @@ var (
 	Options          = &flag.Options{}
 	CustomhttpClient *http.Client
 
+	ExecDir = filepath.Dir(os.Args[0])
 	FofaCli *detectbyFofa.FofaClient
 	AppConf P1fingerConf
 )

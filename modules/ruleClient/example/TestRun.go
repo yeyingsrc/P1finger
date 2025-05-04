@@ -1,8 +1,8 @@
 package example
 
 import (
-	"P1finger/modules/ruleClient"
 	"fmt"
+	"github.com/P001water/P1finger/modules/ruleClient"
 	"github.com/projectdiscovery/gologger"
 )
 

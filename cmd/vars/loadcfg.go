@@ -1,16 +1,16 @@
 package vars
 
 import (
-	"P1finger/libs/p1httputils"
 	"fmt"
+	"github.com/P001water/P1finger/libs/p1httputils"
 	"github.com/projectdiscovery/gologger"
 	"gopkg.in/yaml.v3"
 	"os"
 )
 
 type P1fingerConf struct {
-	CustomizeFingerFile  []string `yaml:"CustomizeFingerFiles"`
-	UseDefaultFingerFils bool     `yaml:"UseDefaultFingerFils"`
+	CustomizeFingerFile   []string `yaml:"CustomizeFingerFiles"`
+	UseDefaultFingerFiles bool     `yaml:"UseDefaultFingerFiles"`
 
 	FofaCredentials struct {
 		Email  string `yaml:"Email"`
@@ -23,8 +23,8 @@ func LoadAppConf(filePath string, config *P1fingerConf) error {
 	_, err := os.Stat(filePath)
 	if os.IsNotExist(err) {
 		defaultConfig := P1fingerConf{
-			CustomizeFingerFile:  []string{},
-			UseDefaultFingerFils: false,
+			CustomizeFingerFile:   []string{},
+			UseDefaultFingerFiles: false,
 			FofaCredentials: struct {
 				Email  string `yaml:"Email"`
 				ApiKey string `yaml:"ApiKey"`

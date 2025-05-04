@@ -1,0 +1,43 @@
+package finger
+
+import (
+	"fmt"
+	"github.com/P001water/P1finger/cmd/vars"
+	"github.com/P001water/P1finger/modules/ruleClient"
+	"github.com/projectdiscovery/gologger"
+	"github.com/spf13/cobra"
+	"time"
+)
+
+var (
+	field string
+)
+
+func init() {
+	fingersCmd.AddCommand(listCmd)
+
+	fingersCmd.Flags().StringVar(&field, "field", "", "导出的字段")
+}
+
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "操作指纹库",
+	Run: func(cmd *cobra.Command, args []string) {
+		p1ruleClient, err := ruleClient.NewRuleClientBuilder().
+			WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
+			WithDefaultFingerFiles(vars.AppConf.UseDefaultFingerFiles).
+			WithOutputFormat(vars.Options.Output).
+			WithTimeout(10 * time.Second).
+			Build()
+		if err != nil {
+			gologger.Error().Msgf("%v", err)
+		}
+
+		fingers := p1ruleClient.P1FingerPrints.GetElements()
+
+		for _, finger := range fingers {
+			f := fmt.Sprintf("%s--%s--%s", finger.ID, finger.Name, finger.FingerFile)
+			fmt.Println(f)
+		}
+	},
+}

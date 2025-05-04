@@ -9,63 +9,67 @@ import (
 )
 
 //go:embed P1fingersYaml/*
-var YamlFingerFs embed.FS
+var ExeFs embed.FS
 
-func (r *RuleClient) LoadFingersFromFile(files []string) error {
+func (r *RuleClient) LoadFingersFromFile(exeDir string, fingerFiles []string) (err error) {
 
-	for _, file := range files {
-		fileInf, err := os.Stat(file)
+	for _, file := range fingerFiles {
+		filePath := filepath.Join(exeDir, file)
+		fileInf, err := os.Stat(filePath)
 		if err != nil {
-			return fmt.Errorf("File %s not existing:", fileInf.Name())
+			return fmt.Errorf("❌ File %s not existing:", file)
 		}
 
 		if filepath.Ext(file) == ".yaml" {
-			fileBytes, err := os.ReadFile(file)
+			fileBytes, err := os.ReadFile(filePath)
 			if err != nil {
-				fmt.Println("❌ 无法读取文件:", fileInf.Name(), err)
-				continue
+				return fmt.Errorf("❌ 无法读取文件:", fileInf.Name(), err)
 			}
 
 			var newFingerprints []FingerprintsType
 			err = yaml.Unmarshal(fileBytes, &newFingerprints)
 			if err != nil {
-				fmt.Println("❌ 解析 YAML 失败:", fileInf.Name(), err)
-				continue
+				return fmt.Errorf("❌ 解析 YAML 失败:", fileInf.Name(), err)
 			}
 
-			r.FingersTdSafe.FingerSlice = append(r.FingersTdSafe.FingerSlice, newFingerprints...)
+			for _, fingerprint := range newFingerprints {
+				fingerprint.FingerFile = filepath.Base(fileInf.Name())
+			}
+
+			r.P1FingerPrints.FingerSlice = append(r.P1FingerPrints.FingerSlice, newFingerprints...)
 		}
 	}
 
 	return nil
 }
 
-func (r *RuleClient) LoadFingersFromExEfs() error {
+func (r *RuleClient) LoadFingersFromExEfs() (err error) {
 
-	fingerfolderPath := r.FingerFilePath
+	fingerfolderPath := r.DefaultFingerPath
 
-	files, err := YamlFingerFs.ReadDir(fingerfolderPath)
+	ExeFsFingerFiles, err := ExeFs.ReadDir(fingerfolderPath)
 	if err != nil {
-		fmt.Println("❌ 无法打开嵌入文件夹:", err)
-		return err
+		return fmt.Errorf("❌ 无法打开嵌入文件夹:", err)
 	}
 
-	for _, file := range files {
+	for _, file := range ExeFsFingerFiles {
 		if filepath.Ext(file.Name()) == ".yaml" {
-			fileBytes, err := YamlFingerFs.ReadFile(fingerfolderPath + "/" + file.Name())
+			fileBytes, err := ExeFs.ReadFile(fingerfolderPath + "/" + file.Name())
 			if err != nil {
-				fmt.Println("❌ 无法读取文件:", file.Name(), err)
-				continue
+				return fmt.Errorf("❌ 无法读取文件:", file.Name(), err)
 			}
 
 			var newFingerprints []FingerprintsType
 			err = yaml.Unmarshal(fileBytes, &newFingerprints)
 			if err != nil {
-				fmt.Println("❌ 解析 YAML 失败:", file.Name(), err)
-				continue
+				return fmt.Errorf("❌ 解析 YAML 失败:", file.Name(), err)
 			}
 
-			r.FingersTdSafe.FingerSlice = append(r.FingersTdSafe.FingerSlice, newFingerprints...)
+			for i := range newFingerprints {
+				newFingerprints[i].FingerFile = file.Name()
+			}
+
+			r.P1FingerPrints.FingerSlice = append(r.P1FingerPrints.FingerSlice, newFingerprints...)
 		}
 	}
 	return nil

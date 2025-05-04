@@ -1,7 +1,7 @@
 package ruleClient
 
 import (
-	"P1finger/libs/p1httputils"
+	"github.com/P001water/P1finger/libs/p1httputils"
 	"regexp"
 	"strings"
 )
@@ -62,7 +62,7 @@ func (r *RuleClient) Detect(url string) (err error) {
 		}
 	}
 
-	for _, finger := range r.FingersTdSafe.GetElements() {
+	for _, finger := range r.P1FingerPrints.GetElements() {
 		for _, matcher := range finger.Matchers {
 			matchFlag := false
 			for _, targetInfo := range P1fingerResps {

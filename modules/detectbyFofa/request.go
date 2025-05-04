@@ -1,9 +1,9 @@
 package detectbyFofa
 
 import (
-	"P1finger/libs/p1httputils"
 	"encoding/json"
 	"fmt"
+	"github.com/P001water/P1finger/libs/p1httputils"
 	"github.com/projectdiscovery/gologger"
 	"net/http"
 	"net/http/httputil"

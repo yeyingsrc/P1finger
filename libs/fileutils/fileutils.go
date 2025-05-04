@@ -1,8 +1,8 @@
 package fileutils
 
 import (
-	"P1finger/libs/p1httputils"
 	"bufio"
+	"github.com/P001water/P1finger/libs/p1httputils"
 	"os"
 )
 

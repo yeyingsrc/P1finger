@@ -5,6 +5,7 @@ type Options struct {
 	UrlFile string
 
 	// proxy usage
+	Proxy      string
 	SocksProxy string
 	HttpProxy  string
 
@@ -15,9 +16,7 @@ type Options struct {
 
 	// fingers file
 	P1fingerFile string
-	CollectMode  string
-
-	Rate int
+	Rate         int
 
 	Update bool
 	Output string
