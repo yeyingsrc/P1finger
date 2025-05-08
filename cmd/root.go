@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/P001water/P1finger/cmd/vars"
 	cc "github.com/ivanpirog/coloredcobra"
 	"github.com/projectdiscovery/gologger"
@@ -14,16 +13,6 @@ var version = "1.0.0" // 定义版本号
 
 func init() {
 	RootCmd.CompletionOptions.DisableDefaultCmd = true
-
-	// 添加版本标志
-	RootCmd.PersistentFlags().StringP("version", "v", "", "显示版本信息")
-	RootCmd.PersistentPreRunE = func(cmd *cobra.Command, args []string) error {
-		if versionFlag, _ := cmd.Flags().GetString("version"); versionFlag != "" {
-			fmt.Printf("P1finger version: %s\n", version)
-			return nil
-		}
-		return nil
-	}
 
 	RootCmd.Flags().StringVarP(&vars.Options.Proxy, "proxy", "p", "", "proxy eg: -proxy socks5://127.0.0.1")
 	RootCmd.Flags().StringVarP(&vars.Options.Output, "output", "o", "p1finger.json", "output file name: [-o p1finger.xlsx] / [-o p1finger.json]")

@@ -12,12 +12,12 @@ import (
 const Version = "0.1.1"
 
 func init() {
-	RootCmd.AddCommand(updateCmd)
+	RootCmd.AddCommand(upgradeCmd)
 }
 
-var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "self update",
+var upgradeCmd = &cobra.Command{
+	Use:   "upgrade",
+	Short: "self upgrade",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := CheckUpdate()
 		if err != nil {

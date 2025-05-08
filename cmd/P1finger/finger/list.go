@@ -9,19 +9,14 @@ import (
 	"time"
 )
 
-var (
-	field string
-)
-
 func init() {
 	fingersCmd.AddCommand(listCmd)
 
-	fingersCmd.Flags().StringVar(&field, "field", "", "导出的字段")
 }
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "操作指纹库",
+	Short: "列出所有指纹的ID和Name",
 	Run: func(cmd *cobra.Command, args []string) {
 		p1ruleClient, err := ruleClient.NewRuleClientBuilder().
 			WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
@@ -36,7 +31,8 @@ var listCmd = &cobra.Command{
 		fingers := p1ruleClient.P1FingerPrints.GetElements()
 
 		for _, finger := range fingers {
-			f := fmt.Sprintf("%s--%s--%s", finger.ID, finger.Name, finger.FingerFile)
+			//f := fmt.Sprintf("%s--%s--%s", finger.ID, finger.Name, finger.FingerFile)
+			f := fmt.Sprintf("%s", finger.Name)
 			fmt.Println(f)
 		}
 	},
