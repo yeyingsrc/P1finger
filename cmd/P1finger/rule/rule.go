@@ -21,7 +21,7 @@ func init() {
 	cmd.RootCmd.AddCommand(RuleCmd)
 
 	RuleCmd.Flags().StringVarP(&vars.Options.Url, "url", "u", "", "target url")
-	RuleCmd.Flags().StringVar(&vars.Options.UrlFile, "uf", "", "target url file")
+	RuleCmd.Flags().StringVarP(&vars.Options.UrlFile, "file", "f", "", "target url file")
 	RuleCmd.Flags().IntVarP(&vars.Options.Rate, "rate", "r", 500, "The number of go coroutines")
 }
 
@@ -43,6 +43,7 @@ var RuleCmd = &cobra.Command{
 func RuleRun() (err error) {
 
 	p1ruleClient, err := ruleClient.NewRuleClientBuilder().
+		WithProxyURL(vars.Options.ProxyUrl).
 		WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
 		WithDefaultFingerFiles(vars.AppConf.UseDefaultFingerFiles).
 		WithOutputFormat(vars.Options.Output).
@@ -97,7 +98,7 @@ func RuleRun() (err error) {
 		go func() {
 			for url := range urlChan {
 				defer workWg.Done()
-				_ = p1ruleClient.Detect(url)
+				_, _ = p1ruleClient.Detect(url)
 				bar.Add(1)
 			}
 		}()

@@ -50,35 +50,6 @@ func NewRequest(method, url string, body io.Reader) (*http.Request, error) {
 	return req, nil
 }
 
-//func HttpGetBak(URL string, customClient *http.Client) (CusResp P1fingerHttpResp, err error) {
-//	// to check if use proxy
-//	httpClient := customClient
-//
-//	req, err := NewRequest(http.MethodGet, URL, nil)
-//	if err != nil {
-//		return CusResp, err
-//	}
-//
-//	// to let go/http lib auto decode http request
-//	if _, ok := req.Header["Accept-Encoding"]; !ok {
-//		req.Header.Del("Accept-Encoding")
-//	}
-//
-//	response, err := httpClient.Do(req)
-//	if err != nil {
-//		err = errors.New("request fail")
-//		return CusResp, err
-//	}
-//	defer response.Body.Close() // 在这里关闭 Body
-//
-//	err = HandleResp2P1fingerResp(response, CusResp)
-//	if err != nil {
-//		return
-//	}
-//
-//	return CusResp, nil
-//}
-
 func HttpGet(URL string, customClient *http.Client) (resp *http.Response, CusResp P1fingerHttpResp, err error) {
 	// to check if use proxy
 	httpClient := customClient

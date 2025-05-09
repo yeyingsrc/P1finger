@@ -4,12 +4,11 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/P001water/P1-github-selfupdate/selfupdate"
+	"github.com/P001water/P1finger/cmd/vars"
 	"github.com/projectdiscovery/gologger"
 	"github.com/spf13/cobra"
 	"os"
 )
-
-const Version = "0.1.1"
 
 func init() {
 	RootCmd.AddCommand(upgradeCmd)
@@ -28,14 +27,17 @@ var upgradeCmd = &cobra.Command{
 }
 
 func CheckUpdate() error {
-	isLatest, latest, err := selfupdate.CheckVersionIsLatest(Version, "P001water/P1finger")
+	isLatest, latest, err := selfupdate.CheckVersionIsLatest(vars.P1fingerVer, "P001water/P1finger")
 	if err != nil {
 		return err
 	}
 	if isLatest {
-		gologger.Info().Msgf("Current version is the latest")
+		gologger.Info().Msgf("Current version is the latest: %v", vars.P1fingerVer)
+
+		gologger.Info().Msgf("Github latest version: %v", latest.Version)
+
 	} else {
-		gologger.Info().Msgf("Current version: %v", Version)
+		gologger.Info().Msgf("Current version: %v", vars.P1fingerVer)
 		gologger.Info().Msgf("latest version: %v, Whether to update ? (yes or no)", latest.Version)
 		fmt.Printf("Input your choose: ")
 		scanner := bufio.NewScanner(os.Stdin)

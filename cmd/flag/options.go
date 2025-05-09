@@ -4,10 +4,7 @@ type Options struct {
 	Url     string
 	UrlFile string
 
-	// proxy usage
-	Proxy      string
-	SocksProxy string
-	HttpProxy  string
+	ProxyUrl string // proxy address
 
 	FingerDir  string
 	FingerOnly string

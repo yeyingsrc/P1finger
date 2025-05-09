@@ -2,7 +2,6 @@ package vars
 
 import (
 	"fmt"
-	"github.com/P001water/P1finger/libs/p1httputils"
 	"github.com/projectdiscovery/gologger"
 	"gopkg.in/yaml.v3"
 	"os"
@@ -58,20 +57,5 @@ func LoadAppConf(filePath string, config *P1fingerConf) error {
 		return fmt.Errorf("解析 YAML 文件时出错: %v", err)
 	}
 
-	return nil
-}
-
-func LoadHttpClient() error {
-	if Options.SocksProxy != "" {
-		CustomhttpClient = p1httputils.NewNoRedirectHttpClient(
-			p1httputils.WithSocks5Proxy(Options.SocksProxy),
-		)
-	} else if Options.HttpProxy != "" {
-		CustomhttpClient = p1httputils.NewNoRedirectHttpClient(
-			p1httputils.WithHttpProxy(Options.HttpProxy),
-		)
-	} else {
-		CustomhttpClient = p1httputils.NewNoRedirectHttpClient()
-	}
 	return nil
 }

@@ -14,9 +14,9 @@ var version = "1.0.0" // 定义版本号
 func init() {
 	RootCmd.CompletionOptions.DisableDefaultCmd = true
 
-	RootCmd.Flags().StringVarP(&vars.Options.Proxy, "proxy", "p", "", "proxy eg: -proxy socks5://127.0.0.1")
-	RootCmd.Flags().StringVarP(&vars.Options.Output, "output", "o", "p1finger.json", "output file name: [-o p1finger.xlsx] / [-o p1finger.json]")
-	RootCmd.Flags().BoolVar(&vars.Options.Debug, "debug", false, "http debug info, eg:[-debug]")
+	RootCmd.PersistentFlags().StringVarP(&vars.Options.ProxyUrl, "proxy", "p", "", "proxy eg: [--proxy socks5://127.0.0.1]")
+	RootCmd.PersistentFlags().StringVarP(&vars.Options.Output, "output", "o", "p1finger.json", "output file name: [-o p1finger.xlsx] / [-o p1finger.json]")
+	RootCmd.PersistentFlags().BoolVar(&vars.Options.Debug, "debug", false, "http debug info, eg:[-debug]")
 }
 
 var RootCmd = &cobra.Command{
@@ -39,12 +39,6 @@ var RootCmd = &cobra.Command{
 		// load P1finger config from p1fingerConf.yaml file
 		filePath := filepath.Join(vars.ExecDir, "p1fingerConf.yaml")
 		err := vars.LoadAppConf(filePath, &vars.AppConf)
-		if err != nil {
-			gologger.Error().Msgf("%v", err)
-			return
-		}
-
-		err = vars.LoadHttpClient()
 		if err != nil {
 			gologger.Error().Msgf("%v", err)
 			return

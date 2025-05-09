@@ -10,10 +10,10 @@
 
 * P1finger 支持两种指纹识别模式：
 
-  1. 基于本地规则库的 Web 资产指纹识别
+  1. 基于P1finger本地规则库的Web指纹识别
 
-  2. 基于Fofa测绘系统的 Web 指纹识别
-* 模块化的指纹库，高度支持客制化，方便自定义指纹库使用
+  2. 基于Fofa测绘系统的Web指纹识别
+* Yaml文件模块化的指纹库，高度支持客制化，方便自定义指纹库使用
 * 支持`Excel`表格和`Json`格式导出，便于数据的二次处理
 * 支持 http / socks代理使用
 
@@ -23,7 +23,7 @@
 
 ## Version
 
-当前最新 `beta_version v0.1.0` （2025/4/08更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新版本 `v0.1.1` （2025/5/10更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
@@ -45,16 +45,41 @@ FofaCredentials: 				    // Fofa Api凭证
 
 ## 开始使用
 
-`-m` 参数切换模式，
+```
+Usage:
 
-1. `-m rule` 基于本地规则库模式，（默认模式）
-2. `-m fofa` 基于fofa的采集模式，（手动开启）
+  P1finger [command]
+
+
+Available Commands:
+
+  finger       Operations on the P1finger fingerprint database
+  fofa         基于Fofa空间测绘引擎的指纹识别
+  help         Help about any command
+  rule         基于P1finger本地指纹库的指纹识别
+  upgrade      self upgrade
+  version      Print the P1finger Version
+
+
+Flags:
+
+      --debug           http debug info, eg:[-debug]
+  -h, --help            help for P1finger
+  -o, --output string   output file name: [-o p1finger.xlsx] / [-o p1finger.json] (default "p1finger.json")
+  -p, --proxy string    proxy eg: [--proxy socks5://127.0.0.1]
+```
+
+
+
+## 使用示例
 
 * 基于本地规则库模式使用
 
+使用 `rule` 命令，指定参数
+
 ```
-P1finger -u [target]
-P1finger -uf [target file] // -uf 指定url文件
+P1finger rule -u [target]
+P1finger rule -uf [target file] // -uf 指定url文件
 
 [-rate 500 可控制协程数量，默认值为500]
 ```
@@ -63,27 +88,37 @@ P1finger -uf [target file] // -uf 指定url文件
 
 * 基于fofa的采集模式使用
 
-`-m fofa`切换到Fofa模式， 设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式
+使用`fofa`命令切换到Fofa模式，
 
 ```
-P1finger -m fofa -u [target]
-P1finger -m fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
+P1finger fofa -u [target]
+P1finger fofa -uf [target file]
 ```
 
 ![image-20250407233235200](./img/image-20250407233235200.png)
+
+* 输出到`Excel`表格和`Json`格式文件
+
+ 设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式，同时支持 `rule`和`fofa`模式
+
+```
+P1finger fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
+```
+
+
 
 * 代理模式使用
 
 socks5 代理
 
 ```
-P1finger.exe -uf urls.txt -socks 127.0.0.1:4781
+P1finger.exe rule -uf urls.txt --proxy socks5://127.0.0.1:8911
 ```
 
 http 代理
 
 ```
-P1finger.exe -uf urls.txt -httpproxy 127.0.0.1:4781
+P1finger.exe rule -uf urls.txt --proxy http://127.0.0.1:8910
 ```
 
 * 自定义指纹库使用

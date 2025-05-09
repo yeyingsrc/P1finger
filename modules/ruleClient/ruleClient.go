@@ -2,6 +2,7 @@ package ruleClient
 
 import (
 	"crypto/tls"
+	"github.com/P001water/P1finger/libs/p1httputils"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -14,8 +15,9 @@ type RuleClient struct {
 	CustomizeFingerFiles  []string               // 可选 自定义指纹文件
 	UseDefaultFingerFiles bool                   // 可选 自定义指纹文件后是否启用默认指纹库
 
-	ProxyUrl    string // 可选 代理地址
-	ProxyClient *http.Client
+	ProxyUrl              string // 可选 代理地址
+	ProxyClient           *http.Client
+	ProxyNoRedirectCilent *http.Client
 
 	OutputFormat string // 可选 输出格式
 
@@ -32,36 +34,6 @@ type RuleClientBuilder struct {
 	outputFormat          string
 	timeout               time.Duration
 	proxyURL              string
-}
-
-// NewHttpClient creates a new HTTP client with optional settings
-func (r *RuleClient) NewProxyClient() {
-
-	transCfg := &http.Transport{
-		TLSClientConfig:   &tls.Config{InsecureSkipVerify: true}, // disable verify
-		DisableKeepAlives: true,
-	}
-
-	httpClient := &http.Client{
-		Timeout:   5 * time.Second,
-		Transport: transCfg,
-		CheckRedirect: func(req *http.Request, via []*http.Request) error {
-			return http.ErrUseLastResponse
-		},
-	}
-
-	r.ProxyClient = httpClient
-}
-
-func NewRuleClient() (*RuleClient, error) {
-
-	r := &RuleClient{
-		DefaultFingerPath: "P1fingersYaml",
-	}
-
-	r.NewProxyClient()
-
-	return r, nil
 }
 
 func NewRuleClientBuilder() *RuleClientBuilder {
@@ -100,6 +72,16 @@ func (b *RuleClientBuilder) Build() (*RuleClient, error) {
 	}
 
 	r.newProxyClientWithTimeout(b.timeout)
+
+	r.ProxyClient = p1httputils.NewHttpClientBuilder().
+		WithProxy(b.proxyURL).
+		Build()
+
+	r.ProxyNoRedirectCilent = p1httputils.NewHttpClientBuilder().
+		WithProxy(b.proxyURL).
+		NoRedirect().
+		Build()
+
 	return r, nil
 }
 

@@ -4,7 +4,6 @@ import (
 	"github.com/P001water/P1finger/cmd/flag"
 	"github.com/P001water/P1finger/modules/detectbyFofa"
 	"github.com/P001water/P1finger/modules/ruleClient"
-	"net/http"
 	"os"
 	"path/filepath"
 )
@@ -14,8 +13,7 @@ var (
 )
 
 var (
-	Options          = &flag.Options{}
-	CustomhttpClient *http.Client
+	Options = &flag.Options{}
 
 	ExecDir = filepath.Dir(os.Args[0])
 	FofaCli *detectbyFofa.FofaClient

@@ -19,7 +19,7 @@ var (
 func init() {
 	cmd.RootCmd.AddCommand(fofaCmd)
 	fofaCmd.Flags().StringVarP(&Url, "url", "u", "", "target url")
-	fofaCmd.Flags().StringVar(&UrlFile, "uf", "", "target url file")
+	fofaCmd.Flags().StringVarP(&UrlFile, "file", "f", "", "target url file")
 }
 
 var fofaCmd = &cobra.Command{

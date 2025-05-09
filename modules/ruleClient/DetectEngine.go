@@ -11,9 +11,9 @@ const (
 	Down = "down"
 )
 
-func (r *RuleClient) Detect(url string) (err error) {
+func (r *RuleClient) Detect(url string) (DetectRst DetectResult, err error) {
 
-	var DetectRst DetectResult
+	//var DetectRst DetectResult
 	var P1fingerResps []p1httputils.P1fingerHttpResp
 
 	fixedUrl, err := CheckHttpPrefix(url)
@@ -28,7 +28,8 @@ func (r *RuleClient) Detect(url string) (err error) {
 		return
 	}
 
-	resp, p1fingerResp, err := p1httputils.HttpGet(fixedUrl, r.ProxyClient)
+	// 首次访问禁止重定向，手动解析重定向
+	resp, p1fingerResp, err := p1httputils.HttpGet(fixedUrl, r.ProxyNoRedirectCilent)
 	if err != nil {
 		DetectRst = DetectResult{
 			OriginUrl:           p1fingerResp.Url,
@@ -48,10 +49,10 @@ func (r *RuleClient) Detect(url string) (err error) {
 	if isRedirect {
 		switch redirectType {
 		case "Location":
-			redirectClient := p1httputils.NewRedirectHttpClient()
-			_, P1fingerRedirectResp, err = p1httputils.HttpGet(url, redirectClient)
+			//redirectClient := p1httputils.NewRedirectHttpClient()
+			_, P1fingerRedirectResp, err = p1httputils.HttpGet(url, r.ProxyClient)
 			if err != nil {
-				return err
+				return
 			}
 			P1fingerResps = append(P1fingerResps, P1fingerRedirectResp)
 
@@ -126,7 +127,7 @@ func (r *RuleClient) Detect(url string) (err error) {
 	}
 
 	r.DetectRstTdSafe.AddElement(DetectRst)
-	return nil
+	return
 }
 
 func matchCondition(content string, words []string, condition string) bool {
