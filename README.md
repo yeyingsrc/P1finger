@@ -79,7 +79,7 @@ Flags:
 
 ```
 P1finger rule -u [target]
-P1finger rule -uf [target file] // -uf 指定url文件
+P1finger rule -f [target file] // -uf 指定url文件
 
 [-rate 500 可控制协程数量，默认值为500]
 ```
@@ -92,7 +92,7 @@ P1finger rule -uf [target file] // -uf 指定url文件
 
 ```
 P1finger fofa -u [target]
-P1finger fofa -uf [target file]
+P1finger fofa -f [target file]
 ```
 
 ![image-20250407233235200](./img/image-20250407233235200.png)
@@ -102,7 +102,7 @@ P1finger fofa -uf [target file]
  设置`-o`参数可自定义输出文件名，支持`json`和`excel表格`模式，同时支持 `rule`和`fofa`模式
 
 ```
-P1finger fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
+P1finger fofa -f [target file] -o file.xlsx // file.xlsx可自定义文件名
 ```
 
 
@@ -112,13 +112,13 @@ P1finger fofa -uf [target file] -o file.xlsx // file.xlsx可自定义文件名
 socks5 代理
 
 ```
-P1finger.exe rule -uf urls.txt --proxy socks5://127.0.0.1:8911
+P1finger.exe rule -f urls.txt --proxy socks5://127.0.0.1:8911
 ```
 
 http 代理
 
 ```
-P1finger.exe rule -uf urls.txt --proxy http://127.0.0.1:8910
+P1finger.exe rule -f urls.txt --proxy http://127.0.0.1:8910
 ```
 
 * 自定义指纹库使用
