@@ -19,7 +19,9 @@
 
 在线体验地址：http://p1finger.securapath.org （在线版后端更新慢，建议下载Github Release版本）
 
+打造P1finger红队模式指纹公开收集表格：[P1finger红队版 -- 红队攻防中的重点资产系统](https://gngefq8qwm.feishu.cn/wiki/DF7iwvUtmiSpqEkr1ntcNL5fnMc?from=from_copylink)
 
+P1finger 指纹库：[P001water/P1finger-Fingerprints: P1finger - 指纹库和技术文档](https://github.com/P001water/P1finger-Fingerprints)
 
 ## Version
 
@@ -40,8 +42,6 @@ FofaCredentials: 				    // Fofa Api凭证
     Email: P001water@163.com
     ApiKey: xxxx
 ```
-
-
 
 ## 开始使用
 
@@ -105,8 +105,6 @@ P1finger fofa -f [target file]
 P1finger fofa -f [target file] -o file.xlsx // file.xlsx可自定义文件名
 ```
 
-
-
 * 代理模式使用
 
 socks5 代理
@@ -131,13 +129,9 @@ CustomizeFingerFiles:
 UseDefaultFingerFils: true
 ```
 
-
-
 ## 指纹库规则和如何贡献指纹
 
 详情参考：[指纹库规范 - 安全漫道.team Wiki](https://securapath.github.io/SecuraPathWiki/P1finger/fingersRepo/)
-
-
 
 # 致谢
 
