@@ -4,10 +4,11 @@ import (
 	"github.com/P001water/P1finger/cmd"
 	"github.com/P001water/P1finger/cmd/vars"
 	"github.com/P001water/P1finger/libs/fileutils"
-	"github.com/P001water/P1finger/modules/detectbyFofa"
-	"github.com/P001water/P1finger/modules/ruleClient"
+	"github.com/P001water/P1finger/modules/FofaClient"
+	"github.com/P001water/P1finger/modules/RuleClient"
 	"github.com/projectdiscovery/gologger"
 	"github.com/spf13/cobra"
+	"path/filepath"
 	"strings"
 )
 
@@ -18,8 +19,8 @@ var (
 
 func init() {
 	cmd.RootCmd.AddCommand(fofaCmd)
-	fofaCmd.Flags().StringVarP(&Url, "url", "u", "", "target url")
-	fofaCmd.Flags().StringVarP(&UrlFile, "file", "f", "", "target url file")
+	fofaCmd.Flags().StringVarP(&vars.Options.Url, "url", "u", "", "target url")
+	fofaCmd.Flags().StringVarP(&vars.Options.UrlFile, "file", "f", "", "target url file")
 }
 
 var fofaCmd = &cobra.Command{
@@ -29,28 +30,7 @@ var fofaCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		gologger.Info().Msgf("p1fingeprint detect model: Fofa\n")
 
-		var err error
-		// 汇总查询的url
-		var targetUrls []string
-		if Url != "" {
-			targetUrls = append(targetUrls, Url)
-		}
-
-		if UrlFile != "" {
-			var tmp []string
-			tmp, err = fileutils.ReadLinesFromFile(UrlFile)
-			if err != nil {
-				return
-			}
-			targetUrls = append(targetUrls, tmp...)
-		}
-
-		if len(targetUrls) <= 0 {
-			gologger.Error().Msg("input url is null")
-			return
-		}
-
-		err = fofaAction(targetUrls)
+		err := fofaAction()
 		if err != nil {
 			gologger.Error().Msg(err.Error())
 			return
@@ -58,21 +38,43 @@ var fofaCmd = &cobra.Command{
 	},
 }
 
-func fofaAction(urls []string) (err error) {
+func fofaAction() (err error) {
 
-	vars.FofaCli, err = detectbyFofa.NewClient(
-		detectbyFofa.WithURL("https://fofa.info/?email=&key=&version=v1"),
-		detectbyFofa.WithAccountDebug(true),
-		detectbyFofa.WithDebug(vars.Options.Debug),
-		detectbyFofa.WithEmail(vars.AppConf.FofaCredentials.Email),
-		detectbyFofa.WithApiKey(vars.AppConf.FofaCredentials.ApiKey),
+	// 整合目标输入
+	var targetUrls []string
+	if vars.Options.Url != "" {
+		targetUrls = append(targetUrls, vars.Options.Url)
+	}
+
+	if vars.Options.UrlFile != "" {
+		var urlsFromFile []string
+		filePath := filepath.Join(vars.ExecDir, vars.Options.UrlFile)
+		urlsFromFile, err = fileutils.ReadLinesFromFile(filePath)
+		if err != nil {
+			gologger.Error().Msgf("%v", err)
+			return
+		}
+		targetUrls = append(targetUrls, urlsFromFile...)
+	}
+
+	if len(targetUrls) <= 0 {
+		gologger.Error().Msg("input url is null")
+		return
+	}
+
+	vars.FofaCli, err = FofaClient.NewClient(
+		FofaClient.WithURL("https://fofa.info/?email=&key=&version=v1"),
+		FofaClient.WithAccountDebug(true),
+		FofaClient.WithDebug(vars.Options.Debug),
+		FofaClient.WithEmail(vars.AppConf.FofaCredentials.Email),
+		FofaClient.WithApiKey(vars.AppConf.FofaCredentials.ApiKey),
 	)
 
 	// 美化查询语法用于Fofa
 	var group []string
 	var FinalQuery []string
 	var querybeautify []string
-	domains, ips := detectbyFofa.SplitDomainsAndIPs(urls)
+	domains, ips := FofaClient.SplitDomainsAndIPs(targetUrls)
 	querybeautify = append(querybeautify, domains...)
 	querybeautify = append(querybeautify, ips...)
 	for i, simpleQuery := range querybeautify {
@@ -93,7 +95,7 @@ func fofaAction(urls []string) (err error) {
 		}
 
 		for _, simpleTarget := range res {
-			tmp := ruleClient.DetectResult{
+			tmp := RuleClient.DetectResult{
 				OriginUrl:      simpleTarget[5] + "://" + simpleTarget[0] + ":" + simpleTarget[1],
 				Host:           simpleTarget[6],
 				WebTitle:       simpleTarget[2],
@@ -104,7 +106,7 @@ func fofaAction(urls []string) (err error) {
 		}
 	}
 
-	err = ruleClient.SaveToFile(vars.DetectResultTdSafe.GetElements(), vars.Options.Output)
+	err = RuleClient.SaveToFile(vars.DetectResultTdSafe.GetElements(), vars.Options.Output)
 	if err != nil {
 		gologger.Error().Msg(err.Error())
 		return

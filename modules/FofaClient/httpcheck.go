@@ -1,4 +1,4 @@
-package detectbyFofa
+package FofaClient
 
 import (
 	"crypto/tls"

@@ -9,11 +9,8 @@ import (
 	"path/filepath"
 )
 
-var version = "1.0.0" // 定义版本号
-
 func init() {
 	RootCmd.CompletionOptions.DisableDefaultCmd = true
-
 	RootCmd.PersistentFlags().StringVarP(&vars.Options.ProxyUrl, "proxy", "p", "", "proxy eg: [--proxy socks5://127.0.0.1]")
 	RootCmd.PersistentFlags().StringVarP(&vars.Options.Output, "output", "o", "p1finger.json", "output file name: [-o p1finger.xlsx] / [-o p1finger.json]")
 	RootCmd.PersistentFlags().BoolVar(&vars.Options.Debug, "debug", false, "http debug info, eg:[-debug]")
@@ -31,11 +28,8 @@ var RootCmd = &cobra.Command{
 	╚═╝      ╚═╝╚═╝     ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚══════╝╚═╝  ╚═
  
         一款红队行动下的重点资产指纹识别工具, Powered by P001water
-
-
 `,
-	PreRun: func(cmd *cobra.Command, args []string) {
-
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		// load P1finger config from p1fingerConf.yaml file
 		filePath := filepath.Join(vars.ExecDir, "p1fingerConf.yaml")
 		err := vars.LoadAppConf(filePath, &vars.AppConf)
@@ -43,7 +37,6 @@ var RootCmd = &cobra.Command{
 			gologger.Error().Msgf("%v", err)
 			return
 		}
-
 	},
 }
 

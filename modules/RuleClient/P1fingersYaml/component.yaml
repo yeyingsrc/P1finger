@@ -9,17 +9,7 @@
     words:
     - ajaxpro
 
-- id: UEditor
-  name: UEditor
-  author: P1finger
-  description: UEditor
-  tags:
-    - UEditor
-  matchers:
-    - location: body
-      words:
-        - ueditor.all
-        - ueditor.config.js
+
 
 - id: sourcemap
   name: sourcemap

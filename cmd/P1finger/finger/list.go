@@ -3,7 +3,7 @@ package finger
 import (
 	"fmt"
 	"github.com/P001water/P1finger/cmd/vars"
-	"github.com/P001water/P1finger/modules/ruleClient"
+	"github.com/P001water/P1finger/modules/RuleClient"
 	"github.com/projectdiscovery/gologger"
 	"github.com/spf13/cobra"
 	"time"
@@ -18,8 +18,8 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "列出所有指纹的ID和Name",
 	Run: func(cmd *cobra.Command, args []string) {
-		p1ruleClient, err := ruleClient.NewRuleClientBuilder().
-			WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
+		p1ruleClient, err := RuleClient.NewRuleClientBuilder().
+			WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFiles).
 			WithDefaultFingerFiles(vars.AppConf.UseDefaultFingerFiles).
 			WithOutputFormat(vars.Options.Output).
 			WithTimeout(10 * time.Second).

@@ -25,7 +25,7 @@ P1finger 指纹库：[P001water/P1finger-Fingerprints: P1finger - 指纹库和�
 
 ## Version
 
-当前最新版本 `v0.1.1` （2025/5/10更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
+当前最新版本 `v0.1.2` （2025/6/03更新）[更新日志参见](https://github.com/P001water/P1finger/blob/master/更新日志.md)
 
 ---
 
@@ -33,11 +33,11 @@ P1finger 指纹库：[P001water/P1finger-Fingerprints: P1finger - 指纹库和�
 
 P1finger在命令行下首次运行生成 `p1fingerConf.yaml` 配置文件，在配置文件中填上 `email` 和 `key` 即可。
 
-生成的配置文件内容如下
+执行命令`P1finger rule`，生成的配置文件内容如下
 
 ```yaml
 CustomizeFingerFiles: [] 			// 自定义的指纹文件
-UseDefaultFingerFils: false			// 自定义指纹库后是否还加入默认的指纹库
+UseDefaultFingerFiles: true			// 自定义指纹库后是否还加入默认的指纹库
 FofaCredentials: 				    // Fofa Api凭证
     Email: P001water@163.com
     ApiKey: xxxx
@@ -79,7 +79,7 @@ Flags:
 
 ```
 P1finger rule -u [target]
-P1finger rule -f [target file] // -uf 指定url文件
+P1finger rule -f [target file] // -f 指定url文件
 
 [-rate 500 可控制协程数量，默认值为500]
 ```

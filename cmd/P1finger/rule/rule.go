@@ -5,8 +5,8 @@ import (
 	"github.com/P001water/P1finger/cmd"
 	"github.com/P001water/P1finger/cmd/vars"
 	"github.com/P001water/P1finger/libs/fileutils"
+	"github.com/P001water/P1finger/modules/RuleClient"
 	"github.com/P001water/P1finger/modules/p1fmt"
-	"github.com/P001water/P1finger/modules/ruleClient"
 	"github.com/fatih/color"
 	"github.com/k0kubun/go-ansi"
 	"github.com/projectdiscovery/gologger"
@@ -42,9 +42,9 @@ var RuleCmd = &cobra.Command{
 
 func RuleRun() (err error) {
 
-	p1ruleClient, err := ruleClient.NewRuleClientBuilder().
+	p1ruleClient, err := RuleClient.NewRuleClientBuilder().
 		WithProxyURL(vars.Options.ProxyUrl).
-		WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
+		WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFiles).
 		WithDefaultFingerFiles(vars.AppConf.UseDefaultFingerFiles).
 		WithOutputFormat(vars.Options.Output).
 		WithTimeout(10 * time.Second).
@@ -121,7 +121,7 @@ func RuleRun() (err error) {
 		if vars.Options.Debug {
 			p1fmt.PrintfShoot(prefix, shoot.OriginUrl, shoot.WebTitle, shoot.FingerTag, shoot.OriginUrlStatusCode)
 		} else {
-			p1fmt.PrintfShoot(prefix, shoot.OriginUrl, shoot.WebTitle, ruleClient.SliceRmDuplication(shoot.FingerTag), shoot.OriginUrlStatusCode)
+			p1fmt.PrintfShoot(prefix, shoot.OriginUrl, shoot.WebTitle, RuleClient.SliceRmDuplication(shoot.FingerTag), shoot.OriginUrlStatusCode)
 		}
 
 	}
@@ -131,7 +131,7 @@ func RuleRun() (err error) {
 		if vars.Options.Debug {
 			p1fmt.PrintMiss(prefix, miss.OriginUrl, miss.WebTitle, miss.FingerTag, miss.OriginUrlStatusCode)
 		} else {
-			p1fmt.PrintMiss(prefix, miss.OriginUrl, miss.WebTitle, ruleClient.SliceRmDuplication(miss.FingerTag), miss.OriginUrlStatusCode)
+			p1fmt.PrintMiss(prefix, miss.OriginUrl, miss.WebTitle, RuleClient.SliceRmDuplication(miss.FingerTag), miss.OriginUrlStatusCode)
 		}
 	}
 
@@ -141,11 +141,11 @@ func RuleRun() (err error) {
 		if vars.Options.Debug {
 			p1fmt.PrintReqFail(prefix, reqFail.OriginUrl, reqFail.FingerTag)
 		} else {
-			p1fmt.PrintReqFail(prefix, reqFail.OriginUrl, ruleClient.SliceRmDuplication(reqFail.FingerTag))
+			p1fmt.PrintReqFail(prefix, reqFail.OriginUrl, RuleClient.SliceRmDuplication(reqFail.FingerTag))
 		}
 	}
 
-	err = ruleClient.SaveToFile(p1ruleClient.DetectRstTdSafe.GetElements(), p1ruleClient.OutputFormat)
+	err = RuleClient.SaveToFile(p1ruleClient.DetectRstTdSafe.GetElements(), p1ruleClient.OutputFormat)
 	if err != nil {
 		gologger.Error().Msg(err.Error())
 		return

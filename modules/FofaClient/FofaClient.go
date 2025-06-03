@@ -5,7 +5,7 @@ env settings:
 - FOFA_EMAIL fofa account email
 - FOFA_KEY fofa account key
 */
-package detectbyFofa
+package FofaClient
 
 import (
 	"context"

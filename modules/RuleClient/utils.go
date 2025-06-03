@@ -1,9 +1,7 @@
-package ruleClient
+package RuleClient
 
 import (
-	"crypto/md5"
 	"crypto/tls"
-	"encoding/hex"
 	"fmt"
 	"net"
 	"strings"
@@ -101,12 +99,6 @@ func CheckProtocolByIp(ip string) string {
 
 	// 如果两者都失败，返回错误
 	//return "", fmt.Errorf("failed to detect protocol (both HTTP and HTTPS failed): %v", err)
-}
-
-func GetHttpBodyHash(body []byte) (hashStr string) {
-	md5Hash := md5.Sum(body)
-	hashStr = hex.EncodeToString(md5Hash[:])
-	return hashStr
 }
 
 // 切片去重 使用泛型来去除切片中的重复元素 go > 1.18

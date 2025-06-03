@@ -3,7 +3,7 @@ package finger
 import (
 	"fmt"
 	"github.com/P001water/P1finger/cmd/vars"
-	"github.com/P001water/P1finger/modules/ruleClient"
+	"github.com/P001water/P1finger/modules/RuleClient"
 	"github.com/projectdiscovery/gologger"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v3"
@@ -29,8 +29,8 @@ var detailCmd = &cobra.Command{
 }
 
 func fingerDetail(fingerName string) {
-	p1ruleClient, err := ruleClient.NewRuleClientBuilder().
-		WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFile).
+	p1ruleClient, err := RuleClient.NewRuleClientBuilder().
+		WithCustomizeFingerFile(vars.AppConf.CustomizeFingerFiles).
 		WithDefaultFingerFiles(vars.AppConf.UseDefaultFingerFiles).
 		WithOutputFormat(vars.Options.Output).
 		WithTimeout(10 * time.Second).
@@ -42,7 +42,7 @@ func fingerDetail(fingerName string) {
 	fingers := p1ruleClient.P1FingerPrints.GetElements()
 
 	// 用于存储符合条件的 finger 对象
-	var matchedFingers []ruleClient.FingerprintsType
+	var matchedFingers []RuleClient.FingerprintsType
 
 	// 遍历 fingers 切片
 	for _, finger := range fingers {

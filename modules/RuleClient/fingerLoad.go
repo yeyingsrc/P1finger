@@ -1,4 +1,4 @@
-package ruleClient
+package RuleClient
 
 import (
 	"embed"

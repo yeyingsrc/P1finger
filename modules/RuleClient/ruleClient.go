@@ -1,4 +1,4 @@
-package ruleClient
+package RuleClient
 
 import (
 	"crypto/tls"
@@ -15,9 +15,9 @@ type RuleClient struct {
 	CustomizeFingerFiles  []string               // 可选 自定义指纹文件
 	UseDefaultFingerFiles bool                   // 可选 自定义指纹文件后是否启用默认指纹库
 
-	ProxyUrl              string // 可选 代理地址
-	ProxyClient           *http.Client
-	ProxyNoRedirectCilent *http.Client
+	ProxyUrl              string       // 可选 代理地址
+	ProxyClient           *http.Client // http客户端 默认跟随重定向
+	ProxyNoRedirectCilent *http.Client // http客户端 默认禁止跟随重定向
 
 	OutputFormat string // 可选 输出格式
 
@@ -45,7 +45,7 @@ func NewRuleClientBuilder() *RuleClientBuilder {
 	}
 }
 
-func (b *RuleClientBuilder) Build() (*RuleClient, error) {
+func (b *RuleClientBuilder) Build() (_ *RuleClient, err error) {
 	r := &RuleClient{
 		DefaultFingerPath:     "P1fingersYaml",
 		UseDefaultFingerFiles: b.useDefaultFingerFiles,
@@ -54,7 +54,6 @@ func (b *RuleClientBuilder) Build() (*RuleClient, error) {
 		ProxyUrl:              b.proxyURL,
 	}
 
-	var err error
 	// 加载自定义指纹（如果有）
 	if len(r.CustomizeFingerFiles) > 0 {
 		err = r.LoadFingersFromFile(filepath.Dir(os.Args[0]), r.CustomizeFingerFiles)
@@ -70,8 +69,6 @@ func (b *RuleClientBuilder) Build() (*RuleClient, error) {
 			return nil, err
 		}
 	}
-
-	r.newProxyClientWithTimeout(b.timeout)
 
 	r.ProxyClient = p1httputils.NewHttpClientBuilder().
 		WithProxy(b.proxyURL).

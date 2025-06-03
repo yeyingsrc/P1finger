@@ -15091,12 +15091,12 @@
   tags:
   - Nextcloud
   matchers:
-  - location: favicon
-    hash:
-    - '167837543'
-  - location: body
-    words:
-    - Nextcloud
+    - location: favicon
+      hash:
+        - '167837543'
+    - location: body
+      words:
+        - Nextcloud
 - id: springsecurity
   name: Spring Security
   author: P1finger

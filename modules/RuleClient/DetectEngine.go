@@ -1,4 +1,4 @@
-package ruleClient
+package RuleClient
 
 import (
 	"github.com/P001water/P1finger/libs/p1httputils"
@@ -11,15 +11,14 @@ const (
 	Down = "down"
 )
 
-func (r *RuleClient) Detect(url string) (DetectRst DetectResult, err error) {
+func (r *RuleClient) Detect(target string) (DetectRst DetectResult, err error) {
 
-	//var DetectRst DetectResult
 	var P1fingerResps []p1httputils.P1fingerHttpResp
 
-	fixedUrl, err := CheckHttpPrefix(url)
+	fixedUrl, err := CheckHttpPrefix(target)
 	if err != nil {
 		DetectRst = DetectResult{
-			OriginUrl: url,
+			OriginUrl: target,
 			WebTitle:  "无法访问",
 			SiteUp:    Down,
 			FingerTag: []string{"unknown proto http/https, try manually"},
@@ -44,17 +43,16 @@ func (r *RuleClient) Detect(url string) (DetectRst DetectResult, err error) {
 	}
 	P1fingerResps = append(P1fingerResps, p1fingerResp)
 
-	var P1fingerRedirectResp p1httputils.P1fingerHttpResp
+	var p1fingerRedirectResp p1httputils.P1fingerHttpResp
 	redirectType, _, isRedirect := p1httputils.CheckPageRedirect(resp, p1fingerResp)
 	if isRedirect {
 		switch redirectType {
 		case "Location":
-			//redirectClient := p1httputils.NewRedirectHttpClient()
-			_, P1fingerRedirectResp, err = p1httputils.HttpGet(url, r.ProxyClient)
+			_, p1fingerRedirectResp, err = p1httputils.HttpGet(target, r.ProxyClient)
 			if err != nil {
 				return
 			}
-			P1fingerResps = append(P1fingerResps, P1fingerRedirectResp)
+			P1fingerResps = append(P1fingerResps, p1fingerRedirectResp)
 
 		case "jsRedirect":
 			// todo
@@ -109,24 +107,96 @@ func (r *RuleClient) Detect(url string) (DetectRst DetectResult, err error) {
 			SiteUp:              Up,
 			FingerTag:           []string{"Target up but missed."},
 		}
-		r.RstMiss.AddElement(DetectRst)
-	} else {
-		DetectRst = DetectResult{
-			OriginUrl:           p1fingerResp.Url,
-			OriginUrlStatusCode: p1fingerResp.StatusCode,
-			WebTitle:            p1fingerResp.WebTitle,
-			SiteUp:              Up,
-			FingerTag:           DetectRst.FingerTag,
+
+		// 规则匹配未匹配到，尝试主动路径匹配
+		webPathMatch, DetectRstTmp := r.matchWithWebPath(fixedUrl)
+		if webPathMatch {
+			DetectRst = DetectRstTmp
+		} else {
+			r.RstMiss.AddElement(DetectRst)
 		}
 
-		if isRedirect {
-			DetectRst.WebTitle = P1fingerRedirectResp.WebTitle
-		}
-
-		r.RstShoot.AddElement(DetectRst)
 	}
 
+	DetectRst = DetectResult{
+		OriginUrl:           p1fingerResp.Url,
+		OriginUrlStatusCode: p1fingerResp.StatusCode,
+		WebTitle:            p1fingerResp.WebTitle,
+		SiteUp:              Up,
+		FingerTag:           DetectRst.FingerTag,
+	}
+
+	if isRedirect {
+		DetectRst.WebTitle = p1fingerRedirectResp.WebTitle
+	}
+
+	r.RstShoot.AddElement(DetectRst)
+
 	r.DetectRstTdSafe.AddElement(DetectRst)
+	return
+}
+
+func (r *RuleClient) matchWithWebPath(fixedUrl string) (matchFlag bool, DetectRst DetectResult) {
+
+	//var DetectRst DetectResult
+	var P1fingerResps []p1httputils.P1fingerHttpResp
+
+	for _, finger := range r.P1FingerPrints.GetElements() {
+		for _, matcher := range finger.Matchers {
+			if matcher.Location == "webPath" {
+				fixWebPathUrl := fixedUrl + matcher.Path
+				// 首次访问禁止重定向，手动解析重定向
+				resp, p1fingerResp, err := p1httputils.HttpGet(fixWebPathUrl, r.ProxyNoRedirectCilent)
+				if err != nil {
+					DetectRst = DetectResult{
+						OriginUrl:           p1fingerResp.Url,
+						OriginUrlStatusCode: p1fingerResp.StatusCode,
+						WebTitle:            p1fingerResp.WebTitle,
+						SiteUp:              Down,
+						FingerTag:           []string{"WebSite down"},
+					}
+					r.DetectRstTdSafe.AddElement(DetectRst)
+					r.RstReqFail.AddElement(DetectRst)
+					return
+				}
+				P1fingerResps = append(P1fingerResps, p1fingerResp)
+
+				var P1fingerRedirectResp p1httputils.P1fingerHttpResp
+				redirectType, _, isRedirect := p1httputils.CheckPageRedirect(resp, p1fingerResp)
+				if isRedirect {
+					switch redirectType {
+					case "Location":
+						//redirectClient := p1httputils.NewRedirectHttpClient()
+						_, P1fingerRedirectResp, err = p1httputils.HttpGet(fixWebPathUrl, r.ProxyClient)
+						if err != nil {
+							return
+						}
+						P1fingerResps = append(P1fingerResps, P1fingerRedirectResp)
+
+					case "jsRedirect":
+						// todo
+					case "VueRoute":
+						// todo
+					}
+				}
+
+				for _, fingerResp := range P1fingerResps {
+					if matchCondition(fingerResp.BodyStr, matcher.Words, matcher.Condition) {
+						DetectRst = DetectResult{
+							OriginUrl:           p1fingerResp.Url,
+							OriginUrlStatusCode: p1fingerResp.StatusCode,
+							WebTitle:            p1fingerResp.WebTitle,
+							SiteUp:              Up,
+							FingerTag:           []string{finger.Name},
+						}
+						matchFlag = true
+						return
+					}
+				}
+			}
+		}
+	}
+
 	return
 }
 

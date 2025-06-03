@@ -1,4 +1,4 @@
-package ruleClient
+package RuleClient
 
 import (
 	"sync"
@@ -16,6 +16,7 @@ type FingerprintsType struct {
 
 type MatcherType struct {
 	Location        string   `yaml:"location,omitempty"`
+	Path            string   `yaml:"path"`
 	Type            string   `yaml:"type,omitempty"`
 	Words           []string `yaml:"words,omitempty"`
 	FaviconHash     []string `yaml:"hash,omitempty"`
