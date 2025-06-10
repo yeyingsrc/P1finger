@@ -1,9 +1,10 @@
 package RuleClient
 
 import (
-	"github.com/P001water/P1finger/libs/p1httputils"
 	"regexp"
 	"strings"
+
+	"github.com/P001water/P1finger/libs/p1httputils"
 )
 
 const (
@@ -48,7 +49,7 @@ func (r *RuleClient) Detect(target string) (DetectRst DetectResult, err error) {
 	if isRedirect {
 		switch redirectType {
 		case "Location":
-			_, p1fingerRedirectResp, err = p1httputils.HttpGet(target, r.ProxyClient)
+			_, p1fingerRedirectResp, err = p1httputils.HttpGet(fixedUrl, r.ProxyClient)
 			if err != nil {
 				return
 			}
@@ -128,6 +129,8 @@ func (r *RuleClient) Detect(target string) (DetectRst DetectResult, err error) {
 
 	if isRedirect {
 		DetectRst.WebTitle = p1fingerRedirectResp.WebTitle
+		DetectRst.RedirectUrlStatusCode = p1fingerRedirectResp.StatusCode
+		DetectRst.RedirectUrl = p1fingerRedirectResp.Url
 	}
 
 	r.RstShoot.AddElement(DetectRst)
